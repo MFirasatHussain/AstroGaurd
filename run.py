@@ -1,32 +1,23 @@
-from src.data_loader import load_data
-from src.preprocess import clean_data, feature_engineering, balance_classes
-from src.train import train_model
-from src.evaluate import evaluate_model
-from src.models import get_models
-from sklearn.model_selection import train_test_split
+from src.preprocess import preprocess_data
+from src.eda import perform_eda
+from src.features import feature_engineering
+from src.pycaret_train import train_with_pycaret
 
-# Load dataset
-df = load_data("data/NEOWS Dataset.csv")
+# Define file paths
+input_file = "data/NEOWS Dataset.csv"
+cleaned_file = "data/NEOWS_Cleaned.csv"
+processed_file = "data/NEOWS_Processed_SMOTE.csv"  # New file after SMOTE
+eda_output_dir = "reports/eda/"
+model_output_dir = "models/"
 
-# Preprocess data
-df = clean_data(df)
-df = feature_engineering(df)
-df = balance_classes(df)
+# Step 1: Run Preprocessing
+preprocess_data(input_file, cleaned_file)
 
-# Save processed data
-df.to_csv("data/processed_data.csv", index=False)
+# Step 2: Perform EDA (Saves plots)
+perform_eda(cleaned_file, eda_output_dir)
 
-# Split dataset
-X = df.drop(columns=['Hazardous'])
-y = df['Hazardous']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Step 3: Feature Engineering with SMOTE
+feature_engineering(cleaned_file, processed_file)
 
-# Train models
-models = get_models()
-trained_models = {name: train_model(model, X_train, y_train) for name, model in models.items()}
-
-# Evaluate models
-for name, model in trained_models.items():
-    print(f"Evaluating {name} model:")
-    evaluate_model(model, X_test, y_test)
-    print("\n" + "-"*50 + "\n")
+# Step 4: Train & Compare Models Using PyCaret
+train_with_pycaret(processed_file, model_output_dir)

@@ -1,23 +1,30 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from imblearn.over_sampling import SMOTE
 
-def clean_data(df):
-    """Handles missing values, removes unnecessary columns."""
-    df = df.drop(columns=['Unnecessary_Column1', 'Unnecessary_Column2'])
-    df.dropna(inplace=True)
-    return df
+def preprocess_data(input_file, output_file):
+    """
+    Loads the dataset, cleans unnecessary columns, converts categorical features,
+    and saves the cleaned dataset.
+    """
+    # Load dataset
+    df = pd.read_csv(input_file)
 
-def feature_engineering(df):
-    """Performs transformations and feature selection."""
-    scaler = StandardScaler()
-    df[['Feature1', 'Feature2']] = scaler.fit_transform(df[['Feature1', 'Feature2']])
-    return df
+    # Define columns to drop (redundant measurements & non-essential details)
+    columns_to_drop = [
+        'Neo Reference ID', 'Name', 'Close Approach Date', 'Epoch Date Close Approach',
+        'Est Dia in M(min)', 'Est Dia in M(max)', 'Est Dia in Miles(min)', 'Est Dia in Miles(max)',
+        'Est Dia in Feet(min)', 'Est Dia in Feet(max)', 'Relative Velocity km per hr', 'Miles per hour',
+        'Miss Dist.(lunar)', 'Miss Dist.(kilometers)', 'Miss Dist.(miles)', 'Orbit ID',
+        'Orbit Determination Date', 'Equinox'
+    ]
 
-def balance_classes(df):
-    """Uses SMOTE to balance dataset."""
-    X = df.drop(columns=['Hazardous'])
-    y = df['Hazardous']
-    smote = SMOTE()
-    X_resampled, y_resampled = smote.fit_resample(X, y)
-    return pd.concat([X_resampled, y_resampled], axis=1)
+    # Drop unnecessary columns
+    df = df.drop(columns=columns_to_drop, errors='ignore')
+
+    # Convert 'Hazardous' column to numeric (1 = Hazardous, 0 = Not Hazardous)
+    df['Hazardous'] = df['Hazardous'].astype(int)
+
+    # Save the cleaned dataset
+    df.to_csv(output_file, index=False)
+    print(f"✅ Preprocessing complete. Cleaned dataset saved to: {output_file}")
+
+    return df  # Returning df for validation

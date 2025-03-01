@@ -1,26 +1,50 @@
-## Introduction
+# 🚀 **Hazardous Asteroid Prediction**
+A machine learning pipeline to predict potentially hazardous asteroids using NASA's **Near Earth Object Web Service (NeoWs)** dataset.  
+This project applies **data preprocessing, feature engineering, synthetic data balancing (SMOTE), and machine learning model training** using PyCaret.
 
-Asteroids, commonly referred to as "space rocks" or "minor planets," are celestial objects that orbit the Sun, primarily in the asteroid belt between the orbits of Mars and Jupiter. While most asteroids are small and benign, some have the potential to pose a significant threat to our planet. Understanding, tracking, and predicting the trajectories of these near-Earth objects (NEOs) is a crucial scientific endeavor. 
+---
 
-Our approach, blending preprocessing, dimensionality reduction, and model selection, resulted in a successful Hazardous Asteroid prediction framework. AdaBoost, with high accuracy and recall scores, emerges as the optimal model. This comprehensive method not only advances asteroid prediction understanding but also holds practical implications for space exploration and planetary defense. The attained 94 percent accuracy underscores the methodology’s effectiveness, paving the way for robust celestial body detection.
+## **📌 Project Overview**
+- **Preprocessing:** Cleans the dataset, removes unnecessary columns, and encodes categorical variables.
+- **EDA:** Generates visual insights into asteroid characteristics.
+- **Feature Engineering:** Applies **SMOTE** to balance class distribution and scales features.
+- **Model Training:** Compares multiple models using **PyCaret** and selects the best one.
+- **Evaluation:** Stores model performance metrics for analysis.
 
-- **P13_AST.ipynb**: This file is to train the models individually, contains preprocessing, feature selection, outlier detection and treatment, PCA analysis, SMOTE and then the model training and predictions.
-- **PyCarert Model Evaluation.ipynb**: PyCaret is an open-source in Python that automates much of the workflow for multiple ML models. The code in this file helped in selecting and analyzing the models.
+---
 
-## Requirements
+## **📌 Data Pipeline**
+### **1️⃣ Preprocessing**
+- Removes redundant features (e.g., duplicate distance measurements).
+- Converts categorical values (e.g., `"Hazardous" → 1/0`).
+- Saves cleaned dataset.
 
-pandas>=1.1.0
-numpy>=1.17
-scikit-learn>=0.23
-matplotlib>=3.2
-seaborn>=0.11.0
-pycaret>=2.3.0
+### **2️⃣ Exploratory Data Analysis (EDA)**
+- Class distribution plot:
+  ![Class Distribution](reports/eda/class_distribution.png)
+- Feature correlation heatmap:
+  ![Correlation Heatmap](reports/eda/correlation_heatmap.png)
 
-- Python version: 3.9.11
+### **3️⃣ Feature Engineering**
+- Encodes categorical variables (`Orbiting Body`).
+- Applies **SMOTE** to balance hazardous vs. non-hazardous asteroids.
+- Scales numerical features.
 
+### **4️⃣ Model Training & Evaluation**
+- Trains **Decision Tree, Random Forest, AdaBoost**, and more.
+- Uses **PyCaret** to compare models automatically.
+- Saves model performance metrics.
 
-## Credits
+| Model          | Accuracy | Precision | Recall | F1-Score |
+|---------------|----------|-----------|--------|----------|
+| **Best Model** | 🚀 **_Auto-selected by PyCaret_** 🚀 |
 
-P13 - Aakarsh Satish, Firasat Hussain Mohammed, Utkarsh Sharma
+🔹 **Full performance table saved in**: [`reports/model_performance.csv`](reports/model_performance.csv)
 
+---
 
+## **📌 How to Run the Project**
+### **1️⃣ Install Dependencies**
+Ensure you have all required libraries installed:
+```bash
+pip install -r requirements.txt
